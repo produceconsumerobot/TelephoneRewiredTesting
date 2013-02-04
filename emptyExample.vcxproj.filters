@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="src\testApp.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\TelephoneRewiredLib\src\logger.cpp">
+      <Filter>TelephoneRewiredLib\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\TelephoneRewiredLib\src\experimentGovernor.cpp">
+      <Filter>TelephoneRewiredLib\src</Filter>
+    </ClCompile>
+    <ClCompile Include="myUtils.cpp">
+      <Filter>TelephoneRewiredLib\src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{d8376475-7454-4a24-b08a-aac121d3ad6f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TelephoneRewiredLib">
+      <UniqueIdentifier>{6e2c2851-6005-43a3-9ac9-354508fb12f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TelephoneRewiredLib\src">
+      <UniqueIdentifier>{7566ec83-4c39-4bc0-a8b3-757afb65c921}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\testApp.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\TelephoneRewiredLib\src\logger.h">
+      <Filter>TelephoneRewiredLib\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\TelephoneRewiredLib\src\myUtils.h">
+      <Filter>TelephoneRewiredLib\src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\telephoneRewiredSettings.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\TelephoneRewiredLib\src\experimentGovernor.h">
+      <Filter>TelephoneRewiredLib\src</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
