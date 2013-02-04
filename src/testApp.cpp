@@ -52,7 +52,6 @@ void testApp::setup(){
 		experimentGovernor.setInstructionsPlayer(&instructionsPlayer);
 		experimentGovernor.nextState();
 
-		
 		ofAddListener(timedPagePlayer.drawPage, this, &testApp::drawTimedPage);
 		experimentGovernor.setTimedPagePlayer(&timedPagePlayer);
 	}
@@ -86,6 +85,7 @@ void testApp::setup(){
 	
 }
 
+
 //--------------------------------------------------------------
 // Callback function to show different instructions pages
 void testApp::drawInstructionsPage(int & pageNum) {
@@ -95,18 +95,25 @@ void testApp::drawInstructionsPage(int & pageNum) {
 		case 0:
 			{
 				ofTrueTypeFont font;
-				font.loadFont("verdana.ttf", 20, true, true);
-				ofColor fontColor(0,220,0);
+				font.loadFont("verdana.ttf", 15, true, true);
+				ofColor fontColor(255,255,255);
 				ofPoint stimulusCenter(ofGetWindowWidth()/2, ofGetWindowHeight()/2);
 
-				string data1 = "This is cool MAAX";
+				std::stringstream ss;
+				ss << "Please enter your code number to begin this portion.\n";
+				ss << "\n";
+				ss << "If you have not yet seen the installation, and want to participate, please go into the \n";
+				ss << "room for TELEPHONE REWIRED. You will receive a code number when your \n";
+				ss << "brainwaves are measured while you experience the installation.  This code will\n";
+				ss << "allow you to access this part of the experiment.\n";
+				string data1 = ss.str();
 				//string data1 = "Please press the ";
 				//string data2 = "GREEN button to begin";
 				ofPushMatrix();
 				ofPushStyle();
 				ofRectangle bounds1 = font.getStringBoundingBox(data1, 0, 0);
 				//ofRectangle bounds2 = font.getStringBoundingBox(data2, 0, 0);
-				ofTranslate(-bounds1.width/2, bounds1.height / 2, 0);
+				ofTranslate(-bounds1.width/2, -bounds1.height / 2, 0);
 				ofSetColor(fontColor);
 				font.drawString(data1, stimulusCenter.x, stimulusCenter.y);
 				ofPopStyle();
@@ -117,41 +124,23 @@ void testApp::drawInstructionsPage(int & pageNum) {
 		case 1:
 			{
 				ofTrueTypeFont font;
-				font.loadFont("verdana.ttf", 20, true, true);
-				ofColor fontColor(0,220,0);
-				ofPoint stimulusCenter(ofGetWindowWidth()/2, ofGetWindowHeight()/2);
-
-				string data1 = "this is cool page 2";
-				//string data1 = "Please press the ";
-				//string data2 = "GREEN button to begin";
-				ofPushMatrix();
-				ofPushStyle();
-				ofRectangle bounds1 = font.getStringBoundingBox(data1, 0, 0);
-				//ofRectangle bounds2 = font.getStringBoundingBox(data2, 0, 0);
-				ofTranslate(-bounds1.width/2, bounds1.height / 2, 0);
-				ofSetColor(fontColor);
-				font.drawString(data1, stimulusCenter.x, stimulusCenter.y);
-				ofPopStyle();
-				ofPopMatrix();
-				break;
-			}
-		case 2:
-			{		
-				ofTrueTypeFont font;
-				font.loadFont("verdana.ttf", 20, true, true);
-				ofColor fontColor(0,220,0);
+				font.loadFont("verdana.ttf", 15, true, true);
+				ofColor fontColor(255,255,255);
 				ofPoint stimulusCenter(ofGetWindowWidth()/2, ofGetWindowHeight()/2);
 
 				std::stringstream ss;
-				ss << "this is rad page 3\n" << "USER ID: " << experimentGovernor.getParticipantID();
-				string data1 = ss.str();//"this is page 3";
-				//string data1 = "Please press the ";
-				//string data2 = "GREEN button to begin";
+				ss << "On a scale of 1 to 5 where 1 is not at all and 5 is the most possible respond to the \n";
+				ss << "following statements, by pressing the number on the keypad that explains how \n";
+				ss << "much you agree with the statement. \n";
+				ss << "\n";
+
+				string data1 = ss.str();
+
 				ofPushMatrix();
 				ofPushStyle();
 				ofRectangle bounds1 = font.getStringBoundingBox(data1, 0, 0);
 				//ofRectangle bounds2 = font.getStringBoundingBox(data2, 0, 0);
-				ofTranslate(-bounds1.width/2, bounds1.height / 2, 0);
+				ofTranslate(-bounds1.width/2, -bounds1.height / 2, 0);
 				ofSetColor(fontColor);
 				font.drawString(data1, stimulusCenter.x, stimulusCenter.y);
 				ofPopStyle();
@@ -172,12 +161,16 @@ void testApp::drawTimedPage(int & pageNum) {
 		case TimedPagePlayer::Congratulations:
 			{
 				ofTrueTypeFont font;
-				font.loadFont("verdana.ttf", 20, true, true);
-				ofColor fontColor(0,220,0);
+				font.loadFont("verdana.ttf", 15, true, true);
+				ofColor fontColor(255,255,255);
 				ofPoint stimulusCenter(ofGetWindowWidth()/2, ofGetWindowHeight()/2);
 
 				std::stringstream ss;
-				ss << "WEEE DOGGY!! YOUR ARE STOKED MAX!\n" << "USER ID: " << experimentGovernor.getParticipantID();
+				ss << "Congratulations on completing TELEPHONE REWIRED.\n";
+				ss << "Please remove the Zeo and return it to the stand. Then go outside to complete the \n";
+				ss << "experiment by entering your code on the survey computer. \n";
+				ss << "\n";
+				ss << "Your code number is: " << experimentGovernor.getParticipantID();
 				string data1 = ss.str();//"this is page 3";
 				//string data1 = "Please press the ";
 				//string data2 = "GREEN button to begin";
@@ -185,7 +178,7 @@ void testApp::drawTimedPage(int & pageNum) {
 				ofPushStyle();
 				ofRectangle bounds1 = font.getStringBoundingBox(data1, 0, 0);
 				//ofRectangle bounds2 = font.getStringBoundingBox(data2, 0, 0);
-				ofTranslate(-bounds1.width/2, bounds1.height / 2, 0);
+				ofTranslate(-bounds1.width/2, -bounds1.height / 2, 0);
 				ofSetColor(fontColor);
 				font.drawString(data1, stimulusCenter.x, stimulusCenter.y);
 				ofPopStyle();

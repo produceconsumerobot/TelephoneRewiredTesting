@@ -101,7 +101,7 @@
   <ItemGroup>
     <ClCompile Include="..\TelephoneRewiredLib\src\experimentGovernor.cpp" />
     <ClCompile Include="..\TelephoneRewiredLib\src\logger.cpp" />
-    <ClCompile Include="myUtils.cpp" />
+    <ClCompile Include="..\TelephoneRewiredLib\src\myUtils.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\testApp.cpp" />
   </ItemGroup>

@@ -13,7 +13,7 @@
     <ClCompile Include="..\TelephoneRewiredLib\src\experimentGovernor.cpp">
       <Filter>TelephoneRewiredLib\src</Filter>
     </ClCompile>
-    <ClCompile Include="myUtils.cpp">
+    <ClCompile Include="..\TelephoneRewiredLib\src\myUtils.cpp">
       <Filter>TelephoneRewiredLib\src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -35,13 +35,13 @@
     <ClInclude Include="..\TelephoneRewiredLib\src\logger.h">
       <Filter>TelephoneRewiredLib\src</Filter>
     </ClInclude>
-    <ClInclude Include="..\TelephoneRewiredLib\src\myUtils.h">
-      <Filter>TelephoneRewiredLib\src</Filter>
-    </ClInclude>
     <ClInclude Include="src\telephoneRewiredSettings.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\TelephoneRewiredLib\src\experimentGovernor.h">
+      <Filter>TelephoneRewiredLib\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\TelephoneRewiredLib\src\myUtils.h">
       <Filter>TelephoneRewiredLib\src</Filter>
     </ClInclude>
   </ItemGroup>
