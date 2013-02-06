@@ -473,7 +473,7 @@ void testApp::keyPressed(int key){
 			}
 		}
 	} else {
-		if ((((char) key) == '0') || (((char) key) == '1') 	
+		if ((((char) key) == '0') || (((char) key) == '1'))	
 		{
 			if (!keyTracker.getKeyState(((char) key))) {
 				experimentGovernor.buttonPressed();
