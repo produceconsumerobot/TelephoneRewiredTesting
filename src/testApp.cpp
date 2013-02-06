@@ -95,6 +95,7 @@ void testApp::setup(){
 	}
 
 	ofSetFullscreen(true);	
+	ofHideCursor();
 }
 
 
@@ -190,7 +191,7 @@ void testApp::drawInstructionsPage(int & pageNum) {
 			ss << "If it's a new word that was not presented in the installation room, press 0.\n";
 			ss << "Please make your answer as quickly as you can.\n";
 			ss << "\n";
-			ss << "Please press 0 to continue with the memory test.\n";
+			ss << "Please press 1 to continue with the memory test.\n";
 
 			string data1 = ss.str();//"this is page 3";
 			ofPushMatrix();
