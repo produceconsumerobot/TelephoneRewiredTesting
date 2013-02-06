@@ -462,9 +462,18 @@ void testApp::keyPressed(int key){
 				experimentGovernor.buttonPressed();
 			}
 		}
-	} else {
-		if ((((char) key) == '0') || (((char) key) == '1') || (((char) key) == '2')
+	} else 	if ((experimentGovernor.getState() == ExperimentGovernor::Instructions) &&
+		(instructionsPlayer.getPageNum() > 0))
+	{
+		if ((((char) key) == '1') || (((char) key) == '2')
 			|| (((char) key) == '3')  || (((char) key) == '4')  || (((char) key) == '5'))	
+		{
+			if (!keyTracker.getKeyState(((char) key))) {
+				experimentGovernor.buttonPressed();
+			}
+		}
+	} else {
+		if ((((char) key) == '0') || (((char) key) == '1') 	
 		{
 			if (!keyTracker.getKeyState(((char) key))) {
 				experimentGovernor.buttonPressed();

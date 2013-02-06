@@ -81,7 +81,7 @@ public:
 		logData = true;
 
 		// Experiment Timing Variables
-		stimulusOnTime =				.3;		// Seconds
+		stimulusOnTime =				.5;		// Seconds
 		interStimulusBaseDelayTime =	0.2;		// Seconds
 		interStimulusRandDelayTime =	0.1;	// Seconds
 		instructionsTimeoutDelay =		30.;	// Seconds
