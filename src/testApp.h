@@ -23,6 +23,7 @@ class testApp : public ofBaseApp{
 
 		int nInstructionPages;
 		string participantCode;
+		vector< string > subjectiveWords;
 		vector< string > subjectiveAssessments;
 		int nSubjectiveAssessments;
 		string currentSubjectiveAssessment;

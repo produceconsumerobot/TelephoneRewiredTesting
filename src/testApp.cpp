@@ -14,16 +14,17 @@ void testApp::setup(){
 	logger.setDirPath(logDirPath);
 
 	// **** OPTIONS **** //
-	subjectiveAssessments.push_back("happy");
-	subjectiveAssessments.push_back("annoyed");
-	subjectiveAssessments.push_back("smart");
-	subjectiveAssessments.push_back("calm");
-	subjectiveAssessments.push_back("bored");
-	subjectiveAssessments.push_back("alert");
-	subjectiveAssessments.push_back("energetic");
-	subjectiveAssessments.push_back("weird");
-	subjectiveAssessments.push_back("disoriented");
-	subjectiveAssessments.push_back("focused");
+	subjectiveWords.push_back("happy");
+	subjectiveWords.push_back("annoyed");
+	subjectiveWords.push_back("smart");
+	subjectiveWords.push_back("calm");
+	subjectiveWords.push_back("bored");
+	subjectiveWords.push_back("alert");
+	subjectiveWords.push_back("energetic");
+	subjectiveWords.push_back("weird");
+	subjectiveWords.push_back("disoriented");
+	subjectiveWords.push_back("focused");
+	subjectiveAssessments = subjectiveWords;
 	nSubjectiveAssessments = subjectiveAssessments.size();
 
 	// Variables to control output functionality
@@ -93,7 +94,7 @@ void testApp::setup(){
 		logger.startThread(true, false);
 	}
 
-	
+	ofSetFullscreen(true);	
 }
 
 
@@ -153,7 +154,7 @@ void testApp::drawInstructionsPage(int & pageNum) {
 			ss << "\n";
 			ss << "\n";
 			ss << "The installation made me feel ";
-			ss << currentSubjectiveAssessment << ".";
+			ss << subjectiveAssessments.at(i-1) << ".";
 			ss << "\n";
 			ss << "\n";
 			ss << "\n";
@@ -328,6 +329,11 @@ void testApp::newExperimentState(string & state){
 		logger.loggerQueue.push(ss.str());
 		logger.unlock();
 	}
+	if (state == ExperimentGovernor::getStateString(ExperimentGovernor::Instructions)) {
+		subjectiveAssessments = subjectiveWords;
+		ofRandomize(subjectiveAssessments);
+		nSubjectiveAssessments = subjectiveAssessments.size();
+	}
 	if (state == ExperimentGovernor::getStateString(ExperimentGovernor::StimulusPresentation)) {
 	}
 }
@@ -339,21 +345,10 @@ void testApp::newParticipant(unsigned long & participantID){
 #endif
 	if (logData) {
 		logger.lock();
-
-		std::stringstream ss;
-		ss << myGetElapsedTimeMillis() << "," << vLogFormat << "," << PARTICIPANT_ID_CODE << 
-			"," << participantID << ",\n";
-		logger.loggerQueue.push(ss.str());
 		
-		//experimentGovernor.reverseParticipantID(participantID);
-
-		//unsigned long participantID = (participantNumber ^ 2999975935);
-		//unsigned long participantID = (participantNumber ^ 313717);
-		//unsigned long temp = (participantID ^ 313717);
-
 		std::stringstream ss2;
 		ss2 << myGetElapsedTimeMillis() << "," << vLogFormat << "," << PARTICIPANT_NUMBER_CODE << 
-			"," << participantID << ",\n";
+			"," << experimentGovernor.reverseParticipantID(participantID) << ",\n";
 		logger.loggerQueue.push(ss2.str());
 
 		logger.unlock();
@@ -365,12 +360,14 @@ void testApp::newInstructionsPage(int & pageNumber){
 #ifdef DEBUG_PRINT 
 	printf("newInstructionsPage()\n");
 #endif
+	/*
 	int i = pageNumber;
 	if ((i > 0) && (i < (1 + nSubjectiveAssessments))) {
 		int randNum = (int) ofRandom(0, subjectiveAssessments.size() - 1);
 		currentSubjectiveAssessment = subjectiveAssessments.at(randNum);
 		subjectiveAssessments.erase(randNum + subjectiveAssessments.begin());
 	}
+	*/
 	if (logData) {
 		logger.lock();
 		std::stringstream ss;
@@ -451,17 +448,13 @@ void testApp::keyPressed(int key){
 			if ((key == 13) && (participantCode.size() == 6)) {
 				// log participantID
 				if (logData) {
+
 					logger.lock();
 
-					std::stringstream ss2;
-					ss2 << myGetElapsedTimeMillis() << "," << vLogFormat << "," << PARTICIPANT_NUMBER_CODE << 
-						"," ;
-					//for (int i=0; i<participantCode.size(); i++) {
-					//	ss2 << ((char) participantCode.at(i));
-					//}
-					ss2 << participantCode;
-					ss2 << ",\n";
-					logger.loggerQueue.push(ss2.str());
+					std::stringstream ss;
+					ss << myGetElapsedTimeMillis() << "," << vLogFormat << "," << PARTICIPANT_ID_CODE << 
+						"," << participantCode << ",\n";
+					logger.loggerQueue.push(ss.str());
 
 					logger.unlock();
 				}
@@ -510,6 +503,10 @@ void testApp::keyReleased(int key){
 	}
 
 	keyTracker.setKeyState(((char) key), false);
+
+	if ( key == 'f') {
+		ofToggleFullscreen();
+	}
 }
 
 
