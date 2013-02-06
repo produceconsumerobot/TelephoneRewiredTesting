@@ -22,6 +22,7 @@ class testApp : public ofBaseApp{
 		TimedPagePlayer timedPagePlayer;
 
 		int nInstructionPages;
+		vector< int > participantCode;
 
 		// Data Logger
 		LoggerThread logger;

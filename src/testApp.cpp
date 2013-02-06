@@ -30,7 +30,7 @@ void testApp::setup(){
 	float congratulationsTime =			settings.congratulationsTime; //Seconds
 	float experimentTimeoutDelay =			settings.experimentTimeoutDelay; //Seconds
 
-	nInstructionPages = settings.nInstructionPages;
+	nInstructionPages = 4;
 
 	// Setup experimentGovernor and Listeners
 	experimentGovernor = ExperimentGovernor();
@@ -38,12 +38,14 @@ void testApp::setup(){
 	ofAddListener(experimentGovernor.newParticipant, this, &testApp::newParticipant);
 	experimentGovernor.setCongratulationsTime(congratulationsTime);	
 	experimentGovernor.setTimeoutDelay(experimentTimeoutDelay); 
-	experimentGovernor.addStimulusPaths("data/stimuli/training/text/form4.txt", "stimuli/training/audio/form1/");
-	experimentGovernor.addStimulusPaths("data/stimuli/training/text/form1.txt", "stimuli/training/audio/form4/");
+	experimentGovernor.addStimulusPaths("data/stimuli/testing/text/form4.txt", "stimuli/testing/audio/form1/");
+	experimentGovernor.addStimulusPaths("data/stimuli/testing/text/form1.txt", "stimuli/testing/audio/form4/");
+	//experimentGovernor.addStimulusPaths("data/stimuli/testing/text/form4.txt", "data/stimuli/testing/audio/form1/");
+	//experimentGovernor.addStimulusPaths("data/stimuli/testing/text/form1.txt", "data/stimuli/testing/audio/form4/");
 
 	// Setup Instruction Player
 	if (showInstructions) {
-		instructionsPlayer = InstructionsPlayer(instructionsTimeoutDelay);
+		instructionsPlayer = InstructionsPlayer(nInstructionPages, instructionsTimeoutDelay);
 		
 		// TODO: Setup Listeners
 		ofAddListener(instructionsPlayer.newPage, this, &testApp::newInstructionsPage);
@@ -147,7 +149,58 @@ void testApp::drawInstructionsPage(int & pageNum) {
 				ofPopMatrix();
 				break;
 			}
-		default:
+		case 2:
+			{
+				ofTrueTypeFont font;
+				font.loadFont("verdana.ttf", 15, true, true);
+				ofColor fontColor(255,255,255);
+				ofPoint stimulusCenter(ofGetWindowWidth()/2, ofGetWindowHeight()/2);
+
+				std::stringstream ss;
+				ss << "On a scale of 1 to 5 hope you're not actually reading this \n";
+				ss << "following statements, by pressing the number on the keypad that explains how \n";
+				ss << "much you agree with the statement. \n";
+				ss << "\n";
+
+				string data1 = ss.str();
+
+				ofPushMatrix();
+				ofPushStyle();
+				ofRectangle bounds1 = font.getStringBoundingBox(data1, 0, 0);
+				//ofRectangle bounds2 = font.getStringBoundingBox(data2, 0, 0);
+				ofTranslate(-bounds1.width/2, -bounds1.height / 2, 0);
+				ofSetColor(fontColor);
+				font.drawString(data1, stimulusCenter.x, stimulusCenter.y);
+				ofPopStyle();
+				ofPopMatrix();
+				break;
+			}
+		case 3:
+			{
+				ofTrueTypeFont font;
+				font.loadFont("verdana.ttf", 15, true, true);
+				ofColor fontColor(255,255,255);
+				ofPoint stimulusCenter(ofGetWindowWidth()/2, ofGetWindowHeight()/2);
+
+				std::stringstream ss;
+				ss << "On a scale of 1 to 5 blah blah blah\n";
+				ss << "following statements, by pressing the number on the keypad that explains how \n";
+				ss << "much you agree with the statement. \n";
+				ss << "\n";
+
+				string data1 = ss.str();
+
+				ofPushMatrix();
+				ofPushStyle();
+				ofRectangle bounds1 = font.getStringBoundingBox(data1, 0, 0);
+				//ofRectangle bounds2 = font.getStringBoundingBox(data2, 0, 0);
+				ofTranslate(-bounds1.width/2, -bounds1.height / 2, 0);
+				ofSetColor(fontColor);
+				font.drawString(data1, stimulusCenter.x, stimulusCenter.y);
+				ofPopStyle();
+				ofPopMatrix();
+				break;
+			}		default:
 			break;
 		}
 	}
@@ -208,6 +261,28 @@ void testApp::drawTimedPage(int & pageNum) {
 				ofPopMatrix();
 			}
 			break;		
+		case TimedPagePlayer::BlankPage:
+			{
+				ofTrueTypeFont font;
+				font.loadFont("verdana.ttf", 20, true, true);
+				ofColor fontColor(220,220,220);
+				ofPoint stimulusCenter(ofGetWindowWidth()/2, ofGetWindowHeight()/2);
+
+				std::stringstream ss;
+				ss << "...Loading data...\n" ;
+				string data1 = ss.str();//"this is page 3";
+				//string data1 = "Please press the ";
+				//string data2 = "GREEN button to begin";
+				ofPushMatrix();
+				ofPushStyle();
+				ofRectangle bounds1 = font.getStringBoundingBox(data1, 0, 0);
+				//ofRectangle bounds2 = font.getStringBoundingBox(data2, 0, 0);
+				ofTranslate(-bounds1.width/2, bounds1.height / 2, 0);
+				ofSetColor(fontColor);
+				font.drawString(data1, stimulusCenter.x, stimulusCenter.y);
+				ofPopStyle();
+				ofPopMatrix();
+			}
 		default:
 			// blank page
 			break;
@@ -314,6 +389,55 @@ void testApp::update(){
 void testApp::draw(){
 	experimentGovernor.update();
 	ofSleepMillis(1);
+
+	
+	// Handling Perticipant Code Entry
+	if ((experimentGovernor.getState() == ExperimentGovernor::Instructions) &&
+		(instructionsPlayer.getPageNum() == 0))
+	{
+		std::stringstream ss;
+		for (int i=0; i<participantCode.size(); i++) {
+			ss << ((char) participantCode.at(i));
+		}
+		string data1 = ss.str();
+
+		ofTrueTypeFont font;
+		font.loadFont("verdana.ttf", 20, true, true);
+		ofColor fontColor(220,220,220);
+		ofPoint stimulusCenter(ofGetWindowWidth()/2, ofGetWindowHeight()/2+200);
+
+		ofPushMatrix();
+		ofPushStyle();
+		ofRectangle bounds1 = font.getStringBoundingBox(data1, 0, 0);
+		//ofRectangle bounds2 = font.getStringBoundingBox(data2, 0, 0);
+		ofTranslate(-bounds1.width/2, -bounds1.height / 2, 0);
+		ofSetColor(fontColor);
+		font.drawString(data1, stimulusCenter.x, stimulusCenter.y);
+		ofPopStyle();
+		ofPopMatrix();
+	}
+
+	// Show some 
+	if (experimentGovernor.getState() == ExperimentGovernor::StimulusPresentation) {
+		std::stringstream ss;
+		ss << "0=new 1=old";
+		string data1 = ss.str();
+
+		ofTrueTypeFont font;
+		font.loadFont("verdana.ttf", 20, true, true);
+		ofColor fontColor(220,220,220);
+		ofPoint stimulusCenter(ofGetWindowWidth()/2, ofGetWindowHeight()/2+200);
+
+		ofPushMatrix();
+		ofPushStyle();
+		ofRectangle bounds1 = font.getStringBoundingBox(data1, 0, 0);
+		ofTranslate(-bounds1.width/2, -bounds1.height / 2, 0);
+		ofSetColor(fontColor);
+		font.drawString(data1, stimulusCenter.x, stimulusCenter.y);
+		ofPopStyle();
+		ofPopMatrix();
+	}
+	
 }
 
 //--------------------------------------------------------------
@@ -328,41 +452,82 @@ void testApp::exit(){
 
 //--------------------------------------------------------------
 void testApp::keyPressed(int key){
-	if ((((char) key) == '0') || (((char) key) == '1') || (((char) key) == '2')
-		 || (((char) key) == '3')  || (((char) key) == '4')  || (((char) key) == '5'))	{
-		if (!keyTracker.getKeyState(((char) key))) {
-			if (logData) {
-				logger.lock();
-				std::stringstream ss;
-				ss << myGetElapsedTimeMillis() << "," << vLogFormat << "," << KEY_DOWN_CODE <<
-					key << ",\n";
-				logger.loggerQueue.push(ss.str());
-				logger.unlock();
+
+	if ((experimentGovernor.getState() == ExperimentGovernor::Instructions) &&
+		(instructionsPlayer.getPageNum() == 0))
+	{ // We're on the first page waiting for a code to be entered
+		if (!keyTracker.getKeyState(((char) key))) { // if the key isn't already down
+			if ((key >= 48) && (key <= 57)) { // numbers 0-10
+				if (participantCode.size() < 6) {
+					participantCode.push_back((char) key);
+				}
 			}
-			experimentGovernor.buttonPressed();
+			if (key == 8) {
+				participantCode.pop_back();
+			}
+			if ((key == 13) && (participantCode.size() == 6)) {
+				// log participantID
+				if (logData) {
+					logger.lock();
+
+					std::stringstream ss2;
+					ss2 << myGetElapsedTimeMillis() << "," << vLogFormat << "," << PARTICIPANT_NUMBER_CODE << 
+						"," ;
+					for (int i=0; i<participantCode.size(); i++) {
+						ss2 << ((char) participantCode.at(i));
+					}
+					ss2 << ",\n";
+					logger.loggerQueue.push(ss2.str());
+
+					logger.unlock();
+				}
+				participantCode.clear();
+				experimentGovernor.buttonPressed();
+			}
 		}
-		keyTracker.setKeyState(((char) key), true);
+	} else {
+		if ((((char) key) == '0') || (((char) key) == '1') || (((char) key) == '2')
+			|| (((char) key) == '3')  || (((char) key) == '4')  || (((char) key) == '5'))	
+		{
+			if (!keyTracker.getKeyState(((char) key))) {
+				experimentGovernor.buttonPressed();
+			}
+		}
 	}
+	if (!keyTracker.getKeyState(((char) key))) {
+		if (logData) {
+			logger.lock();
+			std::stringstream ss;
+			ss << myGetElapsedTimeMillis() << "," << vLogFormat << "," << KEY_DOWN_CODE << "," <<
+				key << ",\n";
+			logger.loggerQueue.push(ss.str());
+			logger.unlock();
+		}
+	}
+
+	keyTracker.setKeyState(((char) key), true);
 }
 
 //--------------------------------------------------------------
 void testApp::keyReleased(int key){
-	if ((((char) key) == '0') || (((char) key) == '1') || (((char) key) == '2')
-		 || (((char) key) == '3')  || (((char) key) == '4')  || (((char) key) == '5'))	{
-		if (!keyTracker.getKeyState(((char) key))) {
-			if (logData) {
-				logger.lock();
-				std::stringstream ss;
-				ss << myGetElapsedTimeMillis() << "," << vLogFormat << "," << KEY_DOWN_CODE <<
-					key << ",\n";
-				logger.loggerQueue.push(ss.str());
-				logger.unlock();
-			}
-			experimentGovernor.buttonPressed();
+	//if ((((char) key) == '0') || (((char) key) == '1') || (((char) key) == '2')
+	//	|| (((char) key) == '3')  || (((char) key) == '4')  || (((char) key) == '5'))	{
+	//		keyTracker.setKeyState(((char) key), false);
+	//}
+	if (keyTracker.getKeyState(((char) key))) {
+		if (logData) {
+			logger.lock();
+			std::stringstream ss;
+			ss << myGetElapsedTimeMillis() << "," << vLogFormat << "," << KEY_UP_CODE << "," <<
+				key << ",\n";
+			logger.loggerQueue.push(ss.str());
+			logger.unlock();
 		}
-		keyTracker.setKeyState(((char) key), false);
 	}
+
+	keyTracker.setKeyState(((char) key), false);
 }
+
 
 //--------------------------------------------------------------
 void testApp::mouseMoved(int x, int y){

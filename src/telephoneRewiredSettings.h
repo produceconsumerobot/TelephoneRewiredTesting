@@ -84,11 +84,11 @@ public:
 		stimulusOnTime =				.3;		// Seconds
 		interStimulusBaseDelayTime =	0.2;		// Seconds
 		interStimulusRandDelayTime =	0.1;	// Seconds
-		instructionsTimeoutDelay =		10.;	// Seconds
+		instructionsTimeoutDelay =		30.;	// Seconds
 		congratulationsTime =			15.;	// Seconds
-		experimentTimeoutDelay =		5.;
+		experimentTimeoutDelay =		30.;
 
-		nInstructionPages = 3;
+		//nInstructionPages = 4;
 	}
 };
 
