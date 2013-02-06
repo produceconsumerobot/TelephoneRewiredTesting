@@ -443,7 +443,7 @@ void testApp::keyPressed(int key){
 					participantCode.push_back((char) key);
 				}
 			}
-			if (key == 8) {
+			if ((key == 8) && (participantCode.size() != 0) {
 				participantCode.pop_back();
 			}
 			if ((key == 13) && (participantCode.size() == 6)) {
