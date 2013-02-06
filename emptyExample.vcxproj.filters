@@ -44,5 +44,8 @@
     <ClInclude Include="..\TelephoneRewiredLib\src\myUtils.h">
       <Filter>TelephoneRewiredLib\src</Filter>
     </ClInclude>
+    <ClInclude Include="..\TelephoneRewiredLib\src\telephoneRewiredLoggerCodes.h">
+      <Filter>TelephoneRewiredLib\src</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

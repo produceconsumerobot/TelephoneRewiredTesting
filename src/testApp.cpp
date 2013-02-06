@@ -14,6 +14,17 @@ void testApp::setup(){
 	logger.setDirPath(logDirPath);
 
 	// **** OPTIONS **** //
+	subjectiveAssessments.push_back("happy");
+	subjectiveAssessments.push_back("annoyed");
+	subjectiveAssessments.push_back("smart");
+	subjectiveAssessments.push_back("calm");
+	subjectiveAssessments.push_back("bored");
+	subjectiveAssessments.push_back("alert");
+	subjectiveAssessments.push_back("energetic");
+	subjectiveAssessments.push_back("weird");
+	subjectiveAssessments.push_back("disoriented");
+	subjectiveAssessments.push_back("focused");
+	nSubjectiveAssessments = subjectiveAssessments.size();
 
 	// Variables to control output functionality
 	checkButtonPresses = settings.checkButtonPresses; // requires Arduino
@@ -30,7 +41,6 @@ void testApp::setup(){
 	float congratulationsTime =			settings.congratulationsTime; //Seconds
 	float experimentTimeoutDelay =			settings.experimentTimeoutDelay; //Seconds
 
-	nInstructionPages = 4;
 
 	// Setup experimentGovernor and Listeners
 	experimentGovernor = ExperimentGovernor();
@@ -40,11 +50,10 @@ void testApp::setup(){
 	experimentGovernor.setTimeoutDelay(experimentTimeoutDelay); 
 	experimentGovernor.addStimulusPaths("data/stimuli/testing/text/form4.txt", "stimuli/testing/audio/form1/");
 	experimentGovernor.addStimulusPaths("data/stimuli/testing/text/form1.txt", "stimuli/testing/audio/form4/");
-	//experimentGovernor.addStimulusPaths("data/stimuli/testing/text/form4.txt", "data/stimuli/testing/audio/form1/");
-	//experimentGovernor.addStimulusPaths("data/stimuli/testing/text/form1.txt", "data/stimuli/testing/audio/form4/");
 
 	// Setup Instruction Player
 	if (showInstructions) {
+		nInstructionPages = nSubjectiveAssessments + 2;
 		instructionsPlayer = InstructionsPlayer(nInstructionPages, instructionsTimeoutDelay);
 		
 		// TODO: Setup Listeners
@@ -61,7 +70,7 @@ void testApp::setup(){
 	// Setup StimulusPlayer
 	if (showStimuli) {
 		//stimulusPlayer = StimulusPlayer("data/stimuli/");
-		stimulusPlayer.loadStimuli("data/stimuli/form1.txt", "stimuli/sounds/form4/");
+		//stimulusPlayer.loadStimuli("data/stimuli/form1.txt", "stimuli/sounds/form4/");
 		stimulusPlayer.setTimes(stimulusOnTime, interStimulusBaseDelayTime, interStimulusRandDelayTime);
 		stimulusPlayer.setIterators(false, true) ;
 
@@ -93,115 +102,104 @@ void testApp::setup(){
 void testApp::drawInstructionsPage(int & pageNum) {
 	if (showInstructions) {
 		int i = pageNum;
-		switch (i) {
-		case 0:
-			{
-				ofTrueTypeFont font;
-				font.loadFont("verdana.ttf", 15, true, true);
-				ofColor fontColor(255,255,255);
-				ofPoint stimulusCenter(ofGetWindowWidth()/2, ofGetWindowHeight()/2);
+		if (i == 0)
+		{
+			ofTrueTypeFont font;
+			font.loadFont("verdana.ttf", 15, true, true);
+			ofColor fontColor(255,255,255);
+			ofPoint stimulusCenter(ofGetWindowWidth()/2, ofGetWindowHeight()/2);
 
-				std::stringstream ss;
-				ss << "Please enter your code number to begin this portion.\n";
-				ss << "\n";
-				ss << "If you have not yet seen the installation, and want to participate, please go into the \n";
-				ss << "room for TELEPHONE REWIRED. You will receive a code number when your \n";
-				ss << "brainwaves are measured while you experience the installation.  This code will\n";
-				ss << "allow you to access this part of the experiment.\n";
-				string data1 = ss.str();
-				//string data1 = "Please press the ";
-				//string data2 = "GREEN button to begin";
-				ofPushMatrix();
-				ofPushStyle();
-				ofRectangle bounds1 = font.getStringBoundingBox(data1, 0, 0);
-				//ofRectangle bounds2 = font.getStringBoundingBox(data2, 0, 0);
-				ofTranslate(-bounds1.width/2, -bounds1.height / 2, 0);
-				ofSetColor(fontColor);
-				font.drawString(data1, stimulusCenter.x, stimulusCenter.y);
-				ofPopStyle();
-				ofPopMatrix();
+			std::stringstream ss;
+			ss << "TELEPHONE REWIRED, is an immersive audiovisual art installation and scientific \n";
+			ss << "experiment examining the role of oscillations in the brain and the future of human \n";
+			ss << "cognition. The lights and sound inside the room are designed to mimic frequencies \n";
+			ss << "ordinarily created by neurons in your brain.  After several minutes of experiencing \n";
+			ss << "TELEPHONE REWIRED your neurons will begin to synchronize with the \n";
+			ss << "installation, firing in a similar pattern. \n";
+			ss << "\n";
+			ss << "We invite you to participate in an experiment studying how this installation \n";
+			ss << "changes your brainwave EEG oscillations and how it affects your, perception, \n";
+			ss << "attention and memory.  This will take about 6 minutes in the adjacent room and 5 \n";
+			ss << "more minutes to complete a survey on this computer.\n";
+			ss << "\n";
+			ss << "If you have not seen the installation yet, please go to the computer inside the room \n";
+			ss << "first. If you choose to participate in the experiment, you will receive a code number \n";
+			ss << "inside that you can enter here.\n";
+			ss << "\n";
+			ss << "Please enter your code number to continue: ";
+			ss << participantCode;
+			string data1 = ss.str();
 
-				break;
-			}
-		case 1:
-			{
-				ofTrueTypeFont font;
-				font.loadFont("verdana.ttf", 15, true, true);
-				ofColor fontColor(255,255,255);
-				ofPoint stimulusCenter(ofGetWindowWidth()/2, ofGetWindowHeight()/2);
+			ofPushMatrix();
+			ofPushStyle();
+			ofRectangle bounds1 = font.getStringBoundingBox(data1, 0, 0);
+			ofTranslate(-bounds1.width/2, -bounds1.height / 2, 0);
+			ofSetColor(fontColor);
+			font.drawString(data1, stimulusCenter.x, stimulusCenter.y);
+			ofPopStyle();
+			ofPopMatrix();
+		}
+		else if ((i > 0) && (i < (1 + nSubjectiveAssessments)))
+		{
+			ofTrueTypeFont font;
+			font.loadFont("verdana.ttf", 15, true, true);
+			ofColor fontColor(255,255,255);
+			ofPoint stimulusCenter(ofGetWindowWidth()/2, ofGetWindowHeight()/2);
 
-				std::stringstream ss;
-				ss << "On a scale of 1 to 5 where 1 is not at all and 5 is the most possible respond to the \n";
-				ss << "following statements, by pressing the number on the keypad that explains how \n";
-				ss << "much you agree with the statement. \n";
-				ss << "\n";
+			std::stringstream ss;
+			ss << "Press the number on the keypad that indicates how much you agree with the \n";
+			ss << "following statement.\n";
+			ss << "\n";
+			ss << "\n";
+			ss << "\n";
+			ss << "The installation made me feel ";
+			ss << currentSubjectiveAssessment << ".";
+			ss << "\n";
+			ss << "\n";
+			ss << "\n";
+			ss << "\n";
+			ss << "1 = Strongly disagree\n";
+			ss << "2 = Disagree\n";
+			ss << "3 = Neither agree nor disagree\n";
+			ss << "4 = Agree\n";
+			ss << "5 = Strongly agree\n";
+			string data1 = ss.str();
 
-				string data1 = ss.str();
+			ofPushMatrix();
+			ofPushStyle();
+			ofRectangle bounds1 = font.getStringBoundingBox(data1, 0, 0);
+			ofTranslate(-bounds1.width/2, -bounds1.height / 2, 0);
+			ofSetColor(fontColor);
+			font.drawString(data1, stimulusCenter.x, stimulusCenter.y);
+			ofPopStyle();
+			ofPopMatrix();
+		} else if (i == (1 + nSubjectiveAssessments)) {
+			ofTrueTypeFont font;
+			font.loadFont("verdana.ttf", 15, true, true);
+			ofColor fontColor(220,220,220);
+			ofPoint stimulusCenter(ofGetWindowWidth()/2, ofGetWindowHeight()/2);
 
-				ofPushMatrix();
-				ofPushStyle();
-				ofRectangle bounds1 = font.getStringBoundingBox(data1, 0, 0);
-				//ofRectangle bounds2 = font.getStringBoundingBox(data2, 0, 0);
-				ofTranslate(-bounds1.width/2, -bounds1.height / 2, 0);
-				ofSetColor(fontColor);
-				font.drawString(data1, stimulusCenter.x, stimulusCenter.y);
-				ofPopStyle();
-				ofPopMatrix();
-				break;
-			}
-		case 2:
-			{
-				ofTrueTypeFont font;
-				font.loadFont("verdana.ttf", 15, true, true);
-				ofColor fontColor(255,255,255);
-				ofPoint stimulusCenter(ofGetWindowWidth()/2, ofGetWindowHeight()/2);
+			std::stringstream ss;
+			ss << "Please put on the headphones to take a memory test. \n";
+			ss << "\n";
+			ss << "During the test, words will appear on-screen or be read aloud\n";
+			ss << "through the headphones. \n";
+			ss << "\n";
+			ss << "If the word was presented to you in the installation room, press 1.\n";
+			ss << "If it's a new word that was not presented in the installation room, press 0.\n";
+			ss << "Please make your answer as quickly as you can.\n";
+			ss << "\n";
+			ss << "Please press 0 to continue with the memory test.\n";
 
-				std::stringstream ss;
-				ss << "On a scale of 1 to 5 hope you're not actually reading this \n";
-				ss << "following statements, by pressing the number on the keypad that explains how \n";
-				ss << "much you agree with the statement. \n";
-				ss << "\n";
-
-				string data1 = ss.str();
-
-				ofPushMatrix();
-				ofPushStyle();
-				ofRectangle bounds1 = font.getStringBoundingBox(data1, 0, 0);
-				//ofRectangle bounds2 = font.getStringBoundingBox(data2, 0, 0);
-				ofTranslate(-bounds1.width/2, -bounds1.height / 2, 0);
-				ofSetColor(fontColor);
-				font.drawString(data1, stimulusCenter.x, stimulusCenter.y);
-				ofPopStyle();
-				ofPopMatrix();
-				break;
-			}
-		case 3:
-			{
-				ofTrueTypeFont font;
-				font.loadFont("verdana.ttf", 15, true, true);
-				ofColor fontColor(255,255,255);
-				ofPoint stimulusCenter(ofGetWindowWidth()/2, ofGetWindowHeight()/2);
-
-				std::stringstream ss;
-				ss << "On a scale of 1 to 5 blah blah blah\n";
-				ss << "following statements, by pressing the number on the keypad that explains how \n";
-				ss << "much you agree with the statement. \n";
-				ss << "\n";
-
-				string data1 = ss.str();
-
-				ofPushMatrix();
-				ofPushStyle();
-				ofRectangle bounds1 = font.getStringBoundingBox(data1, 0, 0);
-				//ofRectangle bounds2 = font.getStringBoundingBox(data2, 0, 0);
-				ofTranslate(-bounds1.width/2, -bounds1.height / 2, 0);
-				ofSetColor(fontColor);
-				font.drawString(data1, stimulusCenter.x, stimulusCenter.y);
-				ofPopStyle();
-				ofPopMatrix();
-				break;
-			}		default:
-			break;
+			string data1 = ss.str();//"this is page 3";
+			ofPushMatrix();
+			ofPushStyle();
+			ofRectangle bounds1 = font.getStringBoundingBox(data1, 0, 0);
+			ofTranslate(-bounds1.width/2, -bounds1.height / 2, 0);
+			ofSetColor(fontColor);
+			font.drawString(data1, stimulusCenter.x, stimulusCenter.y);
+			ofPopStyle();
+			ofPopMatrix();
 		}
 	}
 }
@@ -219,11 +217,11 @@ void testApp::drawTimedPage(int & pageNum) {
 				ofPoint stimulusCenter(ofGetWindowWidth()/2, ofGetWindowHeight()/2);
 
 				std::stringstream ss;
-				ss << "Congratulations on completing TELEPHONE REWIRED.\n";
-				ss << "Please remove the Zeo and return it to the stand. Then go outside to complete the \n";
-				ss << "experiment by entering your code on the survey computer. \n";
+				ss << "Thank you for participating. We hope you enjoyed Telephone Rewired. Please visit \n";
+				ss << "the artists' websites for more information and future updates.\n";
 				ss << "\n";
-				ss << "Your code number is: " << experimentGovernor.getParticipantID();
+				ss << "Sean Montgomery - http://www.produceconsumerobot.com/\n";
+				ss << "LoVid - http://lovid.org/\n";
 				string data1 = ss.str();//"this is page 3";
 				//string data1 = "Please press the ";
 				//string data2 = "GREEN button to begin";
@@ -241,7 +239,7 @@ void testApp::drawTimedPage(int & pageNum) {
 		case TimedPagePlayer::ThankYou:
 			{
 				ofTrueTypeFont font;
-				font.loadFont("verdana.ttf", 20, true, true);
+				font.loadFont("verdana.ttf", 15, true, true);
 				ofColor fontColor(0,220,0);
 				ofPoint stimulusCenter(ofGetWindowWidth()/2, ofGetWindowHeight()/2);
 
@@ -264,20 +262,18 @@ void testApp::drawTimedPage(int & pageNum) {
 		case TimedPagePlayer::BlankPage:
 			{
 				ofTrueTypeFont font;
-				font.loadFont("verdana.ttf", 20, true, true);
+				font.loadFont("verdana.ttf", 15, true, true);
 				ofColor fontColor(220,220,220);
 				ofPoint stimulusCenter(ofGetWindowWidth()/2, ofGetWindowHeight()/2);
 
 				std::stringstream ss;
-				ss << "...Loading data...\n" ;
+				ss << "Loading stimuli using your code number...\n" ;
+				
 				string data1 = ss.str();//"this is page 3";
-				//string data1 = "Please press the ";
-				//string data2 = "GREEN button to begin";
 				ofPushMatrix();
 				ofPushStyle();
 				ofRectangle bounds1 = font.getStringBoundingBox(data1, 0, 0);
-				//ofRectangle bounds2 = font.getStringBoundingBox(data2, 0, 0);
-				ofTranslate(-bounds1.width/2, bounds1.height / 2, 0);
+				ofTranslate(-bounds1.width/2, -bounds1.height / 2, 0);
 				ofSetColor(fontColor);
 				font.drawString(data1, stimulusCenter.x, stimulusCenter.y);
 				ofPopStyle();
@@ -369,12 +365,24 @@ void testApp::newInstructionsPage(int & pageNumber){
 #ifdef DEBUG_PRINT 
 	printf("newInstructionsPage()\n");
 #endif
+	int i = pageNumber;
+	if ((i > 0) && (i < (1 + nSubjectiveAssessments))) {
+		int randNum = (int) ofRandom(0, subjectiveAssessments.size() - 1);
+		currentSubjectiveAssessment = subjectiveAssessments.at(randNum);
+		subjectiveAssessments.erase(randNum + subjectiveAssessments.begin());
+	}
 	if (logData) {
 		logger.lock();
 		std::stringstream ss;
 		ss << myGetElapsedTimeMillis() << "," << vLogFormat << "," << INSTRUCTIONS_PAGE_CODE <<
 			"," << pageNumber << ",\n";
 		logger.loggerQueue.push(ss.str());
+
+		std::stringstream ss2;
+		ss2 << myGetElapsedTimeMillis() << "," << vLogFormat << "," << SUBJECTIVE_ASSESSMENT_CODE <<
+			"," << currentSubjectiveAssessment << ",\n";
+		logger.loggerQueue.push(ss2.str());
+
 		logger.unlock();
 	}
 
@@ -390,41 +398,16 @@ void testApp::draw(){
 	experimentGovernor.update();
 	ofSleepMillis(1);
 
-	
-	// Handling Perticipant Code Entry
-	if ((experimentGovernor.getState() == ExperimentGovernor::Instructions) &&
-		(instructionsPlayer.getPageNum() == 0))
-	{
-		std::stringstream ss;
-		for (int i=0; i<participantCode.size(); i++) {
-			ss << ((char) participantCode.at(i));
-		}
-		string data1 = ss.str();
-
-		ofTrueTypeFont font;
-		font.loadFont("verdana.ttf", 20, true, true);
-		ofColor fontColor(220,220,220);
-		ofPoint stimulusCenter(ofGetWindowWidth()/2, ofGetWindowHeight()/2+200);
-
-		ofPushMatrix();
-		ofPushStyle();
-		ofRectangle bounds1 = font.getStringBoundingBox(data1, 0, 0);
-		//ofRectangle bounds2 = font.getStringBoundingBox(data2, 0, 0);
-		ofTranslate(-bounds1.width/2, -bounds1.height / 2, 0);
-		ofSetColor(fontColor);
-		font.drawString(data1, stimulusCenter.x, stimulusCenter.y);
-		ofPopStyle();
-		ofPopMatrix();
-	}
 
 	// Show some 
 	if (experimentGovernor.getState() == ExperimentGovernor::StimulusPresentation) {
 		std::stringstream ss;
-		ss << "0=new 1=old";
+		ss << "0 = new\n";
+		ss << "1 = old\n";
 		string data1 = ss.str();
 
 		ofTrueTypeFont font;
-		font.loadFont("verdana.ttf", 20, true, true);
+		font.loadFont("verdana.ttf", 15, true, true);
 		ofColor fontColor(220,220,220);
 		ofPoint stimulusCenter(ofGetWindowWidth()/2, ofGetWindowHeight()/2+200);
 
@@ -473,9 +456,10 @@ void testApp::keyPressed(int key){
 					std::stringstream ss2;
 					ss2 << myGetElapsedTimeMillis() << "," << vLogFormat << "," << PARTICIPANT_NUMBER_CODE << 
 						"," ;
-					for (int i=0; i<participantCode.size(); i++) {
-						ss2 << ((char) participantCode.at(i));
-					}
+					//for (int i=0; i<participantCode.size(); i++) {
+					//	ss2 << ((char) participantCode.at(i));
+					//}
+					ss2 << participantCode;
 					ss2 << ",\n";
 					logger.loggerQueue.push(ss2.str());
 

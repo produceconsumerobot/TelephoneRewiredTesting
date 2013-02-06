@@ -22,7 +22,10 @@ class testApp : public ofBaseApp{
 		TimedPagePlayer timedPagePlayer;
 
 		int nInstructionPages;
-		vector< int > participantCode;
+		string participantCode;
+		vector< string > subjectiveAssessments;
+		int nSubjectiveAssessments;
+		string currentSubjectiveAssessment;
 
 		// Data Logger
 		LoggerThread logger;

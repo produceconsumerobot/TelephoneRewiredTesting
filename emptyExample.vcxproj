@@ -109,6 +109,7 @@
     <ClInclude Include="..\TelephoneRewiredLib\src\experimentGovernor.h" />
     <ClInclude Include="..\TelephoneRewiredLib\src\logger.h" />
     <ClInclude Include="..\TelephoneRewiredLib\src\myUtils.h" />
+    <ClInclude Include="..\TelephoneRewiredLib\src\telephoneRewiredLoggerCodes.h" />
     <ClInclude Include="src\telephoneRewiredSettings.h" />
     <ClInclude Include="src\testApp.h" />
   </ItemGroup>
